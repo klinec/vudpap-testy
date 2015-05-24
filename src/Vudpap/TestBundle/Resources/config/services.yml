@@ -1,0 +1,9 @@
+services:
+    manager.test:
+        class: Vudpap\TestBundle\Manager\TestManager
+        calls:
+            - [setContainer, [@service_container]]
+
+    test.loader:
+        class: Vudpap\TestBundle\Provider\TestLoader
+        arguments: [ @service_container ]

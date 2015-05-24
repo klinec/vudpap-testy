@@ -1,0 +1,70 @@
+parameters:
+    ztpi_short.answer_structure.base:
+        1: ztpi.answer.base.total_false
+        2: ztpi.answer.base.false
+        3: ztpi.answer.base.neither
+        4: ztpi.answer.base.true
+        5: ztpi.answer.base.total_true
+    ztpi_short.answer_structure.last:
+        A: ztpi.answer.last.a
+        B: ztpi.answer.last.b
+        C: ztpi.answer.last.c
+        D: ztpi.answer.last.d
+    ztpi_short.questions:
+        ztpi.question.1: ztpi_short.answer.base
+        ztpi.question.2: ztpi_short.answer.base
+        ztpi.question.3: ztpi_short.answer.base
+        ztpi.question.4: ztpi_short.answer.base
+        ztpi.question.5: ztpi_short.answer.base
+        ztpi.question.6: ztpi_short.answer.base
+        ztpi.question.7: ztpi_short.answer.base
+        ztpi.question.8: ztpi_short.answer.base
+        ztpi.question.9: ztpi_short.answer.base
+        ztpi.question.10: ztpi_short.answer.base
+        ztpi.question.11: ztpi_short.answer.base
+        ztpi.question.12: ztpi_short.answer.base
+        ztpi.question.13: ztpi_short.answer.base
+        ztpi.question.14: ztpi_short.answer.base
+        ztpi.question.15: ztpi_short.answer.base
+        ztpi.question.16: ztpi_short.answer.base
+        ztpi.question.17: ztpi_short.answer.base
+        ztpi.question.18: ztpi_short.answer.base
+        ztpi.question.19: ztpi_short.answer.last
+
+services:
+    ztpi_short.form_type:
+        class: AppBundle\Form\Type\ClientBaseType
+
+    ztpi_short.init_page:
+        class: Vudpap\TestBundle\InitPage\BaseFormInitPage
+        arguments: [ 'AppBundle:ZTPI:initForm.html.twig', 'AppBundle\Entity\ClientBase', @ztpi_short.form_type ]
+        calls:
+            - [ setContainer, [@service_container] ]
+
+    ztpi_short.answer.base:
+        class: Vudpap\TestBundle\Answer\OneFromManyRadioAnswer
+        arguments: [ %ztpi_short.answer_structure.base% ]
+        calls:
+            - [ setContainer, [@service_container] ]
+            - [ initForm ]
+
+    ztpi_short.answer.last:
+        class: Vudpap\TestBundle\Answer\OneFromManyRadioAnswer
+        arguments: [ %ztpi_short.answer_structure.last% ]
+        calls:
+            - [ setContainer, [@service_container] ]
+            - [ initForm ]
+
+    ztpi_short.question:
+        class: Vudpap\TestBundle\Question\OnePerPageQuestion
+        arguments: [ %ztpi_short.questions% ]
+        calls:
+            - [ setContainer, [@service_container] ]
+
+    ztpi_short.test:
+        class: Vudpap\TestBundle\Test\TestBase
+        arguments: [ @manager.test, @ztpi_short.init_page, @ztpi_short.question, 'ztpi-short' ]
+        calls:
+            - [ setContainer, [@service_container] ]
+        tags:
+            - { name: vudpap.test }

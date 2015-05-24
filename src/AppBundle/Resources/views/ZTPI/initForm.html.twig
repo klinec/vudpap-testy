@@ -1,0 +1,19 @@
+{{ form_start(form, {attr: {'data-ajaxcom': '', 'novalidate': 'novalidate'}}) }}
+<div class="one-form">
+    {{ form_errors(form.language) }}
+    {{ form_label(form.language) }}
+    {{ form_widget(form.language, {'attr': {'class': 'form-control'}}) }}
+</div>
+
+<div class="one-form">
+    {{ form_errors(form.gender) }}
+    {{ form_label(form.gender) }}
+    {{ form_widget(form.gender, {'attr': {'class': 'form-control'}}) }}
+</div>
+
+<div class="one-form">
+    {{ form_errors(form.age) }}
+    {{ form_label(form.age) }}
+    {{ form_widget(form.age, {'attr': {'class': 'form-control'}}) }}
+</div>
+{{ form_end(form) }}
