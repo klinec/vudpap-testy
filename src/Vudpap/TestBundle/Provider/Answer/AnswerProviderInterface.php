@@ -6,14 +6,6 @@ namespace Vudpap\TestBundle\Provider\Answer;
 interface AnswerProviderInterface
 {
     /**
-     * Set structure of answers
-     *
-     * @param $structure
-     * @return $this
-     */
-    public function setStructure($structure);
-
-    /**
      * Get structure data for question
      *
      * @return mixed

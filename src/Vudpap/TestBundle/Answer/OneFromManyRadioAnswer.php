@@ -11,11 +11,6 @@ class OneFromManyRadioAnswer extends AnswerProviderAbstract
     /** @var \Symfony\Component\Form\Form */
     private $form;
 
-    public function __construct($structure)
-    {
-        $this->setStructure($structure);
-    }
-
     public function initForm($translationDomain = 'messages')
     {
         $this->form = $this->container->get('form.factory')->createBuilder()
@@ -52,7 +47,7 @@ class OneFromManyRadioAnswer extends AnswerProviderAbstract
         return false;
     }
 
-    public function render($template, $question)
+    public function render($question)
     {
         if (!$this->form->isSubmitted() and $this->isAnswered($question)) {
             $this->form->get('answer')->setData(
@@ -61,7 +56,7 @@ class OneFromManyRadioAnswer extends AnswerProviderAbstract
         }
 
         return $this->container->get('templating')->render(
-            $template,
+            $this->template,
             [
                 'form' => $this->form->createView()
             ]

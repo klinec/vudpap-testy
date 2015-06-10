@@ -43,21 +43,21 @@ services:
 
     ztpi_short.answer.base:
         class: Vudpap\TestBundle\Answer\OneFromManyRadioAnswer
-        arguments: [ %ztpi_short.answer_structure.base% ]
+        arguments: [ %ztpi_short.answer_structure.base%, 'AppBundle:ZTPI:answer.html.twig' ]
         calls:
             - [ setContainer, [@service_container] ]
             - [ initForm ]
 
     ztpi_short.answer.last:
         class: Vudpap\TestBundle\Answer\OneFromManyRadioAnswer
-        arguments: [ %ztpi_short.answer_structure.last% ]
+        arguments: [ %ztpi_short.answer_structure.last%, 'AppBundle:ZTPI:answer.html.twig' ]
         calls:
             - [ setContainer, [@service_container] ]
             - [ initForm ]
 
     ztpi_short.question:
         class: Vudpap\TestBundle\Question\OnePerPageQuestion
-        arguments: [ %ztpi_short.questions% ]
+        arguments: [ %ztpi_short.questions%, 'AppBundle:ZTPI:question.html.twig' ]
         calls:
             - [ setContainer, [@service_container] ]
 

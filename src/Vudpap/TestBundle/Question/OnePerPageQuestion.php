@@ -10,16 +10,16 @@ class OnePerPageQuestion extends QuestionProviderAbstract
     /**
      * Render html template for question
      *
-     * @param $template
      * @return string
      */
-    public function render($template)
+    public function render()
     {
         return $this->container->get('templating')->render(
-            $template,
+            $this->template,
             [
                 'questionId' => $this->getCurrentQuestion(),
-                'questionText' => $this->show()
+                'questionText' => $this->getQuestion(),
+                'answer' => $this->getAnswerProvider()->render($this->getCurrentQuestion())
             ]
         );
     }

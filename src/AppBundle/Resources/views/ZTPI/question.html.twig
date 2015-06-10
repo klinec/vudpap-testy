@@ -1,0 +1,4 @@
+<form method="post" action="{{ path('basic_test', {'testName': app.request.get('testName'), 'testId': app.request.get('testId')}) }}" data-ajaxcom>
+    <p>{{ question }}</p>
+    <div>{{ answer|raw }}</div>
+</form>

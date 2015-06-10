@@ -120,6 +120,9 @@ class TestBase extends TestProviderAbstract
             case 'initPage':
                 $result = $this->initPageProvider->render();
                 break;
+            case 'question':
+                $result = $this->questionProvider->render();
+                break;
         }
 
         return $result;

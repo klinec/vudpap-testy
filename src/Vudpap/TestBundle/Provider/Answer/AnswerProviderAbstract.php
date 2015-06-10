@@ -7,20 +7,14 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 
 abstract class AnswerProviderAbstract extends ContainerAware implements AnswerProviderInterface
 {
+    protected $template;
     protected $answered;
     protected $structure;
 
-    /**
-     * Set structure of answers
-     *
-     * @param $structure
-     * @return $this
-     */
-    public function setStructure($structure)
+    public function __construct($structure, $template)
     {
         $this->structure = $structure;
-
-        return $this;
+        $this->template = $template;
     }
 
     /**
