@@ -3,7 +3,9 @@
 namespace Vudpap\TestBundle\Provider\Question;
 
 
-interface QuestionProviderInterface
+use Vudpap\TestBundle\Provider\ProviderInterface;
+
+interface QuestionProviderInterface extends ProviderInterface
 {
 
 }

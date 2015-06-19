@@ -20,7 +20,7 @@ class Controller extends SymfonyController
 
     const DEFAULT_TITLE = 'Testy';
 
-    const CONTAINER_MAIN = '#main_content';
+    const CONTAINER_MAIN = '#survey_container';
 
     public function getPageContainer($name = false)
     {

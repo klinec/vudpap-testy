@@ -5,7 +5,7 @@ namespace Vudpap\TestBundle\Provider\InitPage;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\HttpFoundation\Request;
+use Vudpap\TestBundle\Entity\Progress;
 
 abstract class InitPageProviderAbstract extends ContainerAware implements InitPageProviderInterface
 {
@@ -34,13 +34,14 @@ abstract class InitPageProviderAbstract extends ContainerAware implements InitPa
     /**
      * Set structure of answers
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request
+     * @param \Symfony\Component\HttpFoundation\Request $data
      * @return bool
      */
-    public function process(Request $request)
+    public function process($data = null)
     {
         $this->form = $this->container->get('form.factory')->create($this->formType, $this->entity);
-        $this->form->handleRequest($request);
+        /** @var \Symfony\Component\HttpFoundation\Request $data */
+        $this->form->handleRequest($data);
 
         if ($this->form->isValid()) {
             $manager = $this->container->get('doctrine')->getManager();
@@ -58,8 +59,8 @@ abstract class InitPageProviderAbstract extends ContainerAware implements InitPa
         return $this->container->get('templating')->render(
             $this->template,
             array_merge(
-                ['form' => $this->form->createView()],
-                $params
+                $params,
+                ['form' => $this->form->createView()]
             )
         );
     }
@@ -67,4 +68,24 @@ abstract class InitPageProviderAbstract extends ContainerAware implements InitPa
     abstract public function serialize();
 
     abstract public function unserialize($serializedData);
+
+    /**
+     * By default it is not possible to go to previous step from result
+     *
+     * @return bool
+     */
+    public function goToPrevious()
+    {
+        return true;
+    }
+
+    /**
+     * Gets current and total progress
+     *
+     * @return Progress
+     */
+    public function getProgress()
+    {
+        return new Progress();
+    }
 }

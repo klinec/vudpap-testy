@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class TestController extends Controller
 {
-    public function basicAction(Request $request, $testName, $testUrlId = '')
+    public function basicAction(Request $request, $testName, $testUrlId = '', $previous = '')
     {
         $testProvider = $this->get('test.loader')->getTest($testName);
 
@@ -21,6 +21,10 @@ class TestController extends Controller
             $testUrlId = $testProvider->init();
         } elseif (!$testProvider->load($testUrlId)) {
             throw $this->createNotFoundException('Undefined test');
+        }
+
+        if (!empty($previous)) {
+            $testProvider->goToPrevious();
         }
 
         $testProvider->process($request);

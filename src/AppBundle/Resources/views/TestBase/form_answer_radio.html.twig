@@ -1,0 +1,8 @@
+{%- block choice_widget_expanded -%}
+    {%- for child in form %}
+        <li>
+            {{- form_widget(child, {'attr': {'class': 'check_radio'}}) -}}
+            {{- form_label(child, child.vars.label, {'label_attr': {'class': 'label_radio_bottom'}}) -}}
+        </li>
+    {% endfor -%}
+{%- endblock choice_widget_expanded -%}

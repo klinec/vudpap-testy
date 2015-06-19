@@ -8,6 +8,8 @@ use Vudpap\TestBundle\Provider\Answer\AnswerProviderAbstract;
 
 class OneFromManyRadioAnswer extends AnswerProviderAbstract
 {
+    const FORM_FIELD = 'answer';
+
     /** @var \Symfony\Component\Form\Form */
     private $form;
 
@@ -15,10 +17,11 @@ class OneFromManyRadioAnswer extends AnswerProviderAbstract
     {
         $this->form = $this->container->get('form.factory')->createBuilder()
             ->add(
-                'answer',
+                self::FORM_FIELD,
                 'choice',
                 [
                     'choices' => $this->getStructure(),
+                    'expanded' => true,
                     'translation_domain' => $translationDomain,
                     'constraints' => new NotBlank(),
                     'required' => true
@@ -30,16 +33,15 @@ class OneFromManyRadioAnswer extends AnswerProviderAbstract
     /**
      * Process answer data
      *
-     * @param $question
      * @param $data
      * @return bool
      */
-    public function handleAnswer($question, $data)
+    public function process($data)
     {
         $this->form->handleRequest($data);
 
         if ($this->form->isValid()) {
-            $this->addAnswered($question, $this->form->get('answer')->getData());
+            $this->setAnswer($this->form->get(self::FORM_FIELD)->getData());
 
             return true;
         }
@@ -47,19 +49,25 @@ class OneFromManyRadioAnswer extends AnswerProviderAbstract
         return false;
     }
 
-    public function render($question)
+    public function render($params = [])
     {
-        if (!$this->form->isSubmitted() and $this->isAnswered($question)) {
-            $this->form->get('answer')->setData(
-                $this->getAnswered($question)
+        if ($this->form->isSubmitted() and $this->form->isValid()) {
+            // clear submitted data in form from previous answer to not show in the next answer
+            $this->initForm();
+        }
+
+        if ($this->hasAnswer()) {
+            $this->form->get(self::FORM_FIELD)->setData(
+                $this->getAnswer()
             );
         }
 
         return $this->container->get('templating')->render(
             $this->template,
-            [
-                'form' => $this->form->createView()
-            ]
+            array_merge(
+                $params,
+                ['form' => $this->form->createView()]
+            )
         );
     }
 }

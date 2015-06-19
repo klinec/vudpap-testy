@@ -14,7 +14,7 @@ class ClientBaseType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $ages = [];
-        for ($i = 1; $i <= 99; $i++) {
+        for ($i = 6; $i <= 99; $i++) {
             $ages[$i] = $i;
         }
 
@@ -24,7 +24,7 @@ class ClientBaseType extends AbstractType
                 'choice',
                 [
                     'label' => 'Vek',
-                    'placeholder' => 'Vyberte si',
+                    'placeholder' => 'Vek',
                     'choices' => $ages
                 ]
             )
@@ -33,7 +33,7 @@ class ClientBaseType extends AbstractType
                 'choice',
                 [
                     'label' => 'Pohlavie',
-                    'placeholder' => 'Vyberte si',
+                    'placeholder' => 'Pohlavie',
                     'choices' => [
                         'm' => 'Muž',
                         'f' => 'Žena'
@@ -44,7 +44,7 @@ class ClientBaseType extends AbstractType
                 'language',
                 'choice',
                 [
-                    'placeholder' => 'Vyberte si',
+                    'placeholder' => 'Jazyk, ktorým doma najčastejšie rozprávate',
                     'choices' => [
                         'slovak' => 'Slovenský',
                         'gipsy' => 'Rómsky',

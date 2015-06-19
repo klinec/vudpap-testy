@@ -8,7 +8,7 @@ use Symfony\Component\DependencyInjection\ContainerAware;
 abstract class AnswerProviderAbstract extends ContainerAware implements AnswerProviderInterface
 {
     protected $template;
-    protected $answered;
+    protected $answer;
     protected $structure;
 
     public function __construct($structure, $template)
@@ -30,56 +30,42 @@ abstract class AnswerProviderAbstract extends ContainerAware implements AnswerPr
     /**
      * Process answer data
      *
-     * @param $question
      * @param $data
      * @return bool
      */
-    abstract public function handleAnswer($question, $data);
+    abstract public function process($data);
 
     /**
-     * Save answered question
+     * Save answer
      *
-     * @param $question
      * @param $answer
      * @return $this
      */
-    public function addAnswered($question, $answer)
+    public function setAnswer($answer)
     {
-        $this->answered[$question] = $answer;
+        $this->answer = $answer;
 
         return $this;
     }
 
     /**
-     * Return true if question is answered
+     * Return true if there is an answer
      *
-     * @param $question
      * @return bool
      */
-    public function isAnswered($question)
+    public function hasAnswer()
     {
-        return isset($this->answered[$question]);
+        return !empty($this->answer);
     }
 
     /**
      * Return answered value if exists
      *
-     * @param $question
      * @return mixed
      */
-    public function getAnswered($question)
+    public function getAnswer()
     {
-        return isset($this->answered[$question]) ? $this->answered[$question] : null;
-    }
-
-    /**
-     * Get all answers
-     *
-     * @return mixed
-     */
-    public function getAnswers()
-    {
-        return $this->answered;
+        return $this->answer;
     }
 
     /**
@@ -89,7 +75,7 @@ abstract class AnswerProviderAbstract extends ContainerAware implements AnswerPr
      */
     public function serialize()
     {
-        return serialize($this->answered);
+        return serialize($this->answer);
     }
 
     /**
@@ -100,7 +86,7 @@ abstract class AnswerProviderAbstract extends ContainerAware implements AnswerPr
      */
     public function unserialize($serializedState)
     {
-        $this->answered = unserialize($serializedState);
+        $this->answer = unserialize($serializedState);
 
         return $this;
     }

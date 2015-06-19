@@ -1,0 +1,48 @@
+common:
+    progress: Aktuálny stav
+    backward: Späť
+    forward: Ďalej
+    surveys: Dotazníky
+
+test:
+    name:
+        ztpi-short: ZTPI
+
+ztpi_short:
+    init_page:
+        fill_base_data: Vyplňte základné údaje
+        text: Tento krátky dotazník slúži na výskumné účely. Je anonymný! Vopred Vám ďakujeme za ochotu ho vyplniť.  Prečítajte si každú položku, a tak  poctivo, ako je to možné, odpovedajte na otázku: "Ako je to pre vás charakteristické alebo pravdivé."
+    question:
+        1: Pohľady, zvuky a vône dôverne známe z detstva, vo mne často vyvolajú veľa pekných spomienok.
+        2: Často myslím na to, čo som mal(a) v živote urobiť inak.
+        3: Veľmi rád(a) spomínam na svoju minulosť.
+        4: Často mám dojem, že nemôžem splniť svoje záväzky voči priateľom a nadriadeným.
+        5: Keď chcem niečo dosiahnuť, vytýčim si svoje ciele a premyslím si, akými konkrétnymi prostriedkami k nim dospejem.
+        6: Vzhľadom k tomu, že sa aj tak stane, čo sa má stať, nezáleží vlastne na tom, čo urobím ja.
+        7: Ľahko sa mi vybavia spomienky na šťastné chvíle.
+        8: Považujem za dôležité vniesť do svojho života vzrušenie.
+        9: Pomyslenie na moju budúcnosť ma často rozosmutí.
+        10: Myslím na príležitosti, ktoré som v živote premeškal(a).
+        11: Nemá zmysel robiť si starosti s budúcnosťou, pretože ju aj tak nemôžem nijak ovplyvniť.
+        12: Vďaka sústavnej práci plním úlohy včas.
+        13: Riskujem, aby som dodal(a) svojmu životu vzrušenie.
+        14: Keď viem, že je potrebné urobiť nejakú prácu, dokážem odolať pokušeniam.
+        15: Pochybujem, že budem schopný(á) dosiahnuť svoje životné ciele.
+        16: Nechávam sa strhnúť okamžitým vzrušením.
+        17: Myslievam na zlé veci, ktoré sa mi v minulosti prihodili.
+        18: Moja životná cesta je riadená silami, na ktoré nemám vplyv.
+        19: Predstavte si situáciu, že vyhráte 2 000 eur. Vyberte - zakrúžkujte jednu z možností, čo by ste s väčšou časťou týchto peňazí urobili?
+    answer:
+        base:
+            total_false: Úplne nepravdivý
+            ffalse: Nepravdivý
+            neither: Ani pravdivý / Ani nepravdivý
+            ttrue: Pravdivý
+            total_true: Úplne pravdivý
+        last:
+            a: Kúpil(a) by som si elektroniku (televízor, DVD prehrávač, rádio a podobne)
+            b: Upravil(a) by som si bývanie (dom, byt).
+            c: Urobil(a) by som velkú oslavu (hostinu, party).
+            d: Dal(a) by som peniaze na sporenie.
+    result:
+        thank_you: Ďakujeme za vyplnenie dotazníka

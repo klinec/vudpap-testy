@@ -4,7 +4,7 @@ namespace Vudpap\TestBundle\Manager;
 
 
 use Symfony\Component\DependencyInjection\ContainerAware;
-use Vudpap\TestBundle\Entity\Test;
+use Vudpap\TestBundle\Entity\TestBase;
 
 class TestManager extends ContainerAware implements TestManagerInterface
 {
@@ -12,11 +12,11 @@ class TestManager extends ContainerAware implements TestManagerInterface
      * Create new test
      *
      * @param $params
-     * @return Test
+     * @return TestBase
      */
     public function create($params = null)
     {
-        $testEntity = new Test();
+        $testEntity = new TestBase();
         $testEntity->setTestName($params['testName']);
         $testEntity->setAction($params['action']);
         $testEntity->setCreatedAt(new \DateTime());
@@ -32,7 +32,7 @@ class TestManager extends ContainerAware implements TestManagerInterface
     }
 
     /**
-     * @param Test $testEntity
+     * @param TestBase $testEntity
      */
     public function update(&$testEntity)
     {
@@ -58,10 +58,10 @@ class TestManager extends ContainerAware implements TestManagerInterface
      * Get data from DB
      *
      * @param $urlId
-     * @return Test
+     * @return TestBase
      */
     public function get($urlId)
     {
-        return $this->container->get('doctrine')->getRepository('Vudpap\TestBundle\Entity\Test')->findOneByUrl($urlId);
+        return $this->container->get('doctrine')->getRepository('Vudpap\TestBundle\Entity\TestBase')->findOneByUrl($urlId);
     }
 }

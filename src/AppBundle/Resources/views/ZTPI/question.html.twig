@@ -1,4 +1,21 @@
-<form method="post" action="{{ path('basic_test', {'testName': app.request.get('testName'), 'testId': app.request.get('testId')}) }}" data-ajaxcom>
-    <p>{{ question }}</p>
-    <div>{{ answer|raw }}</div>
-</form>
+{% extends '@App/layout.html.twig' %}
+
+{% block application_content %}
+
+    {% include '@App/TestBase/progress.html.twig' %}
+
+    <form method="post" action="{{ urlNext }}" data-ajaxcom="" novalidate>
+        <div class="step">
+            <div class="row">
+                <h3 class="col-md-12">{{ questionText|trans }}</h3>
+                <div class="col-md-12" style="padding-top: 30px">
+                    <ul class="data-list floated floated-5 clearfix">
+                        {{ answer|raw }}
+                    </ul>
+                </div><!-- end col-md-12 -->
+            </div>
+        </div>
+
+        {% include '@App/TestBase/next_prev_buttons.html.twig' %}
+    </form>
+{% endblock application_content %}

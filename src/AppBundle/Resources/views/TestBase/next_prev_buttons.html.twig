@@ -1,0 +1,23 @@
+{% if urlPrev is not defined %}
+    {% set urlPrev = '#' %}
+{% endif %}
+
+{% if backwardDisabled is not defined %}
+    {% set backwardDisabled = false %}
+{% endif %}
+
+{% if forwardDisabled is not defined %}
+    {% set forwardDisabled = false %}
+{% endif %}
+
+<div id="bottom-wizard">
+    <a
+        {% if not backwardDisabled %}href="{{ urlPrev }}"{% endif %}
+        {% if backwardDisabled %}disabled="disabled"{% endif %}
+        name="backward" class="backward" data-ajaxcom
+    >{{ 'common.backward'|trans }}</a>
+    <button
+        {% if forwardDisabled %}disabled="disabled"{% endif %}
+        type="submit" name="forward" class="forward"
+    >{{ 'common.forward'|trans }}</button>
+</div><!-- end bottom-wizard -->

@@ -4,34 +4,37 @@ namespace Vudpap\TestBundle\Test;
 
 
 use Symfony\Component\HttpFoundation\Request;
+use Vudpap\TestBundle\Entity\Progress;
 use Vudpap\TestBundle\Provider\InitPage\InitPageProviderInterface;
 use Vudpap\TestBundle\Provider\Question\QuestionProviderInterface;
+use Vudpap\TestBundle\Provider\Result\ResultProviderInterface;
 use Vudpap\TestBundle\Provider\Test\TestProviderAbstract;
 use Vudpap\TestBundle\Entity\Test as TestEntity;
 use Vudpap\TestBundle\Manager\TestManagerInterface;
 
 class TestBase extends TestProviderAbstract
 {
-    private $currentQuestion = null;
+    /** @var  TestEntity */
+    private $testEntity;
     /** @var  InitPageProviderInterface */
     private $initPageProvider;
     /** @var  QuestionProviderInterface */
     private $questionProvider;
-    private $answers;
-    /** @var  TestEntity */
-    private $testEntity;
+    /** @var  ResultProviderInterface */
     private $resultProvider;
 
     public function __construct(
         TestManagerInterface $manager,
         InitPageProviderInterface $initPageProvider,
         QuestionProviderInterface $questionProvider,
+        ResultProviderInterface $resultProvider,
         $name
     ) {
         parent::__construct($name, $manager);
 
         $this->initPageProvider = $initPageProvider;
         $this->questionProvider = $questionProvider;
+        $this->resultProvider = $resultProvider;
     }
 
     public function init()
@@ -44,6 +47,7 @@ class TestBase extends TestProviderAbstract
             ]
         );
 
+        // TODO: rename to UrlId
         return $this->testEntity->getUrl();
     }
     /**
@@ -73,17 +77,61 @@ class TestBase extends TestProviderAbstract
             return false;
         }
 
+        $this->loadAction();
+
         return true;
     }
 
-    /**
-     * Get current progress
-     *
-     * @return int
-     */
-    public function progress()
+    public function setAction($action)
     {
+        $this->testEntity->setAction($action);
+        $this->loadAction();
+    }
 
+    public function loadAction($action = '')
+    {
+        if (empty($action)) {
+            $action = $this->testEntity->getAction();
+        }
+        $providerVariable = $action . 'Provider';
+        $providerDataGetter = 'get' . ucfirst($action);
+
+        $this->$providerVariable->unserialize(
+            $this->testEntity->$providerDataGetter()
+        );
+    }
+
+    /**
+     * Gets current and total progress
+     *
+     * @return Progress
+     */
+    public function getProgress()
+    {
+        $total = 0;
+        $current = 0;
+        // $current will be increased only till current action is reached
+        $wasCurrent = false;
+
+        foreach ($this->actions as $action) {
+            $providerVariable = $action . 'Provider';
+
+            /** @var Progress $actionProgress */
+            $actionProgress =  $this->$providerVariable->getProgress();
+            $total += $actionProgress->getTotal();
+
+            if ($this->testEntity->getAction() == $action) {
+                $wasCurrent = true;
+                $current += $actionProgress->getCurrent();
+            }
+
+            // it's before current action, so it means that $action was already done
+            if (!$wasCurrent) {
+                $current += $actionProgress->getTotal();
+            }
+        }
+
+        return new Progress($current, $total);
     }
 
     public function process(Request $request)
@@ -91,17 +139,18 @@ class TestBase extends TestProviderAbstract
         switch($this->testEntity->getAction()) {
             case 'initPage':
                 if ($this->initPageProvider->process($request)) {
-                    $this->testEntity->setAction('question');
+                    $this->setAction('question');
                 }
 
                 $this->testEntity->setInitPage($this->initPageProvider->serialize());
                 break;
             case 'question':
-                $this->questionProvider->unserialize(
-                    $this->testEntity->getQuestion(),
-                    $this->testEntity->getAnswer()
-                );
+                if ($this->questionProvider->process($request)) {
+                    $this->setAction('result');
+                }
 
+                $this->testEntity->setQuestion($this->questionProvider->serialize());
+                break;
         }
 
         $this->save();
@@ -118,39 +167,75 @@ class TestBase extends TestProviderAbstract
 
         switch($this->testEntity->getAction()) {
             case 'initPage':
-                $result = $this->initPageProvider->render();
+                $result = $this->initPageProvider->render(
+                    [
+                        'urlNext' => $this->getUrlNext(),
+                        'urlPrev' => $this->getUrlPrev(),
+                        'testName' => $this->getName(),
+                        'progress' => $this->getProgress(),
+                        'backwardDisabled' => $this->testEntity->getAction() == reset($this->actions),
+                        'forwardDisabled' => $this->testEntity->getAction() == end($this->actions),
+                    ]
+                );
                 break;
             case 'question':
-                $result = $this->questionProvider->render();
+                $result = $this->questionProvider->render(
+                    [
+                        'urlNext' => $this->getUrlNext(),
+                        'urlPrev' => $this->getUrlPrev(),
+                        'testName' => $this->getName(),
+                        'progress' => $this->getProgress(),
+                        'backwardDisabled' => $this->testEntity->getAction() == reset($this->actions),
+                        'forwardDisabled' => $this->testEntity->getAction() == end($this->actions),
+                    ]
+                );
+                break;
+            case 'result':
+                $result = $this->resultProvider->render(
+                    [
+                        'urlNext' => $this->getUrlNext(),
+                        'urlPrev' => $this->getUrlPrev(),
+                        'testName' => $this->getName(),
+                        'progress' => $this->getProgress(),
+                        'backwardDisabled' => $this->testEntity->getAction() == reset($this->actions),
+                        'forwardDisabled' => $this->testEntity->getAction() == end($this->actions),
+                    ]
+                );
                 break;
         }
 
         return $result;
     }
 
-    public function getUrl($params = [])
+    public function getUrlNext($params = [])
     {
         $params['testName'] = $this->getName();
+        $params['testUrlId'] = $this->testEntity->getUrl();
 
         return $this->container->get('router')->generate('basic_test', $params);
     }
 
-    public function getCurrentQuestion()
+    public function getUrlPrev($params = [])
     {
-        return $this->currentQuestion;
+        $params['testName'] = $this->getName();
+        $params['testUrlId'] = $this->testEntity->getUrl();
+        $params['previous'] = 'previous';
+
+        return $this->container->get('router')->generate('basic_test', $params);
     }
 
-    public function getPreviousQuestion()
+    public function goToPrevious()
     {
-        $previousQuestion = $this->currentQuestion - 1;
+        $providerVariable = $this->testEntity->getAction() . 'Provider';
 
-        return isset($this->questions[$previousQuestion]) ? $previousQuestion : null;
-    }
+        if (!$this->$providerVariable->goToPrevious()) {
+            $this->setAction(
+                $this->getPreviousAction(
+                    $this->testEntity->getAction()
+                )
+            );
+        }
 
-    public function getNextQuestion()
-    {
-        $nextQuestion = $this->currentQuestion + 1;
-
-        return isset($this->questions[$nextQuestion]) ? $nextQuestion : null;
+        $this->save();
     }
 }

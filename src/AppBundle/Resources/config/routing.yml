@@ -1,7 +1,7 @@
 homepage:
     path:     /
     defaults: { _controller: AppBundle:Default:index }
-
+#TODO: rename to base_test
 basic_test:
-    path: /test/{testName}/{testId}
-    defaults: { _controller: AppBundle:Test:basic, testId: '' }
+    path: /test/{testName}/{testUrlId}/{previous}
+    defaults: { _controller: AppBundle:Test:basic, testUrlId: '', previous: '' }

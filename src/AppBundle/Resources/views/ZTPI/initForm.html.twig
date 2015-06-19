@@ -1,20 +1,38 @@
-{{ form_start(form, {attr: {'data-ajaxcom': '', 'novalidate': 'novalidate'}}) }}
-<div class="one-form">
-    {{ form_errors(form.language) }}
-    {{ form_label(form.language) }}
-    {{ form_widget(form.language, {'attr': {'class': 'form-control'}}) }}
-</div>
+{% extends '@App/layout.html.twig' %}
 
-<div class="one-form">
-    {{ form_errors(form.gender) }}
-    {{ form_label(form.gender) }}
-    {{ form_widget(form.gender, {'attr': {'class': 'form-control'}}) }}
-</div>
+{% block application_content %}
 
-<div class="one-form">
-    {{ form_errors(form.age) }}
-    {{ form_label(form.age) }}
-    {{ form_widget(form.age, {'attr': {'class': 'form-control'}}) }}
-</div>
-<input type="submit">
+{% include '@App/TestBase/progress.html.twig' %}
+
+{% form_theme form '@App/TestBase/form_errors.html.twig' %}
+
+<form name="{{ form.vars.name }}" method="post" action="{{ urlNext }}" data-ajaxcom="" novalidate>
+    <div class="step">
+        <div class="row">
+            <h3 class="col-md-10">{{ 'ztpi_short.init_page.fill_base_data'|trans }}</h3>
+            <div class="col-md-6">
+                <ul class="data-list">
+                    <li>
+                        {{ form_widget(form.language, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.language) }}
+                    </li>
+                    <li>
+                        {{ form_widget(form.gender, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.gender) }}
+                    </li>
+                    <li>
+                        {{ form_widget(form.age, {'attr': {'class': 'form-control'}}) }}
+                        {{ form_errors(form.age) }}
+                    </li>
+                </ul>
+            </div><!-- end col-md-6 -->
+
+            <div class="col-md-6">
+                {{ 'ztpi_short.init_page.text'|trans }}
+            </div>
+        </div>
+    </div>
+
+    {% include '@App/TestBase/next_prev_buttons.html.twig' %}
 {{ form_end(form) }}
+{% endblock application_content %}

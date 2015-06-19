@@ -1,35 +1,35 @@
 parameters:
     ztpi_short.answer_structure.base:
-        1: ztpi.answer.base.total_false
-        2: ztpi.answer.base.false
-        3: ztpi.answer.base.neither
-        4: ztpi.answer.base.true
-        5: ztpi.answer.base.total_true
+        1: ztpi_short.answer.base.total_false
+        2: ztpi_short.answer.base.ffalse
+        3: ztpi_short.answer.base.neither
+        4: ztpi_short.answer.base.ttrue
+        5: ztpi_short.answer.base.total_true
     ztpi_short.answer_structure.last:
-        A: ztpi.answer.last.a
-        B: ztpi.answer.last.b
-        C: ztpi.answer.last.c
-        D: ztpi.answer.last.d
+        A: ztpi_short.answer.last.a
+        B: ztpi_short.answer.last.b
+        C: ztpi_short.answer.last.c
+        D: ztpi_short.answer.last.d
     ztpi_short.questions:
-        ztpi.question.1: ztpi_short.answer.base
-        ztpi.question.2: ztpi_short.answer.base
-        ztpi.question.3: ztpi_short.answer.base
-        ztpi.question.4: ztpi_short.answer.base
-        ztpi.question.5: ztpi_short.answer.base
-        ztpi.question.6: ztpi_short.answer.base
-        ztpi.question.7: ztpi_short.answer.base
-        ztpi.question.8: ztpi_short.answer.base
-        ztpi.question.9: ztpi_short.answer.base
-        ztpi.question.10: ztpi_short.answer.base
-        ztpi.question.11: ztpi_short.answer.base
-        ztpi.question.12: ztpi_short.answer.base
-        ztpi.question.13: ztpi_short.answer.base
-        ztpi.question.14: ztpi_short.answer.base
-        ztpi.question.15: ztpi_short.answer.base
-        ztpi.question.16: ztpi_short.answer.base
-        ztpi.question.17: ztpi_short.answer.base
-        ztpi.question.18: ztpi_short.answer.base
-        ztpi.question.19: ztpi_short.answer.last
+        ztpi_short.question.1: ztpi_short.answer.base
+        ztpi_short.question.2: ztpi_short.answer.base
+        ztpi_short.question.3: ztpi_short.answer.base
+        ztpi_short.question.4: ztpi_short.answer.base
+        ztpi_short.question.5: ztpi_short.answer.base
+        ztpi_short.question.6: ztpi_short.answer.base
+        ztpi_short.question.7: ztpi_short.answer.base
+        ztpi_short.question.8: ztpi_short.answer.base
+        ztpi_short.question.9: ztpi_short.answer.base
+        ztpi_short.question.10: ztpi_short.answer.base
+        ztpi_short.question.11: ztpi_short.answer.base
+        ztpi_short.question.12: ztpi_short.answer.base
+        ztpi_short.question.13: ztpi_short.answer.base
+        ztpi_short.question.14: ztpi_short.answer.base
+        ztpi_short.question.15: ztpi_short.answer.base
+        ztpi_short.question.16: ztpi_short.answer.base
+        ztpi_short.question.17: ztpi_short.answer.base
+        ztpi_short.question.18: ztpi_short.answer.base
+        ztpi_short.question.19: ztpi_short.answer.last
 
 services:
     ztpi_short.form_type:
@@ -61,9 +61,15 @@ services:
         calls:
             - [ setContainer, [@service_container] ]
 
+    ztpi_short.result:
+        class: Vudpap\TestBundle\Result\ThankYouResult
+        arguments: [ 'AppBundle:ZTPI:result.html.twig' ]
+        calls:
+            - [ setContainer, [@service_container] ]
+
     ztpi_short.test:
         class: Vudpap\TestBundle\Test\TestBase
-        arguments: [ @manager.test, @ztpi_short.init_page, @ztpi_short.question, 'ztpi-short' ]
+        arguments: [ @manager.test, @ztpi_short.init_page, @ztpi_short.question, @ztpi_short.result, 'ztpi-short' ]
         calls:
             - [ setContainer, [@service_container] ]
         tags:

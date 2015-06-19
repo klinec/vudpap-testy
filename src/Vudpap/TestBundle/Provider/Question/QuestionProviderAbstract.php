@@ -4,10 +4,12 @@ namespace Vudpap\TestBundle\Provider\Question;
 
 
 use Symfony\Component\DependencyInjection\ContainerAware;
+use Vudpap\TestBundle\Entity\Progress;
 use Vudpap\TestBundle\Provider\Answer\AnswerProviderInterface;
 
 abstract class QuestionProviderAbstract extends ContainerAware implements QuestionProviderInterface
 {
+    protected $answers;
     protected $template;
     protected $questions;
     protected $currentQuestion = 1;
@@ -28,6 +30,50 @@ abstract class QuestionProviderAbstract extends ContainerAware implements Questi
     }
 
     /**
+     * @return int
+     */
+    public function getCurrentQuestion()
+    {
+        return $this->currentQuestion;
+    }
+
+    /**
+     * @param int $currentQuestion
+     */
+    public function setCurrentQuestion($currentQuestion)
+    {
+        $this->currentQuestion = $currentQuestion;
+    }
+
+    public function isLastQuestion($questionId = null)
+    {
+        if ($questionId == null) {
+            $questionId = $this->currentQuestion;
+        }
+
+        return count($this->questions) == $questionId;
+    }
+
+    public function isFistQuestion($questionId = null)
+    {
+        if ($questionId == null) {
+            $questionId = $this->currentQuestion;
+        }
+
+        return 1 === $questionId;
+    }
+
+    public function goToNext()
+    {
+        if (!$this->isLastQuestion()) {
+            $this->currentQuestion++;
+            $this->loadAnswer();
+        }
+
+        return $this;
+    }
+
+    /**
      * @param $questionId
      * @return AnswerProviderInterface
      */
@@ -37,22 +83,55 @@ abstract class QuestionProviderAbstract extends ContainerAware implements Questi
             $questionId = $this->currentQuestion;
         }
 
-        /** @var AnswerProviderInterface $answerProvider */
-        list($answerProvider) = array_slice($this->questions, $questionId - 1, 1);
+        /** @var string $answerProvider */
+        $answerProviderName = current(array_slice($this->questions, $questionId - 1, 1));
 
-        return $answerProvider;
+        return $this->container->get($answerProviderName);
     }
 
-    public function serialize()
+    public function loadAnswer($questionId = null)
     {
-        return $this->currentQuestion;
+        if ($questionId == null) {
+            $questionId = $this->getCurrentQuestion();
+        }
+
+        $this->getAnswerProvider()->unserialize(
+            isset($this->answers[$questionId]) ? $this->answers[$questionId] : null
+        );
     }
 
-    public function unserialize($questionData, $answerData)
-    {
-        $this->currentQuestion = empty($questionData) ? 1 : $questionData;
-        $this->getAnswerProvider($this->currentQuestion)->unserialize($answerData);
+    abstract public function process($data = null);
 
-        return $this;
+    abstract public function render($params = []);
+
+    abstract public function serialize();
+
+    abstract public function unserialize($serializedData);
+
+    /**
+     * Sets $this->currentQuestion to previous one
+     *
+     * @return bool returns false if it is not possible to move to previous state
+     */
+    public function goToPrevious()
+    {
+        if ($this->isFistQuestion()) {
+            return false;
+        }
+
+        $this->currentQuestion--;
+        $this->loadAnswer();
+
+        return true;
+    }
+
+    /**
+     * Gets current and total progress
+     *
+     * @return Progress
+     */
+    public function getProgress()
+    {
+        return new Progress($this->getCurrentQuestion(), count($this->questions));
     }
 }

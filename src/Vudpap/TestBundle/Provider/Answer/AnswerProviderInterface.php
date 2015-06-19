@@ -15,43 +15,32 @@ interface AnswerProviderInterface
     /**
      * Process answer data
      *
-     * @param $question
      * @param $data
      * @return bool
      */
-    public function handleAnswer($question, $data);
+    public function process($data);
 
     /**
-     * Save answered question
+     * Save answer
      *
-     * @param $question
      * @param $answer
      * @return $this
      */
-    public function addAnswered($question, $answer);
+    public function setAnswer($answer);
 
     /**
-     * Return true if question is answered
+     * Return true if there is an answer
      *
-     * @param $question
      * @return bool
      */
-    public function isAnswered($question);
+    public function hasAnswer();
 
     /**
      * Return answered value if exists
      *
-     * @param $question
      * @return mixed
      */
-    public function getAnswered($question);
-
-    /**
-     * Get all answers
-     *
-     * @return mixed
-     */
-    public function getAnswers();
+    public function getAnswer();
 
     /**
      * Serialize current state

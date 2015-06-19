@@ -50,6 +50,25 @@ abstract class TestProviderAbstract extends ContainerAware implements TestProvid
 
         return next($this->actions);
     }
+    /**
+     * Get previous action name
+     *
+     * @param $action
+     * @return string|null
+     */
+    public function getPreviousAction($action = null)
+    {
+        if ($action == null) {
+            return end($this->actions);
+        }
+
+        $currentAction = end($this->actions);
+        while ($currentAction and $currentAction != $action) {
+            $currentAction = prev($this->actions);
+        }
+
+        return prev($this->actions);
+    }
 
     /**
      * Save current state
@@ -71,15 +90,23 @@ abstract class TestProviderAbstract extends ContainerAware implements TestProvid
      *
      * @return int
      */
-    abstract public function progress();
+    abstract public function getProgress();
 
     /**
-     * Get test's url
+     * Get test's url for next action
      *
      * @param array $params
      * @return string
      */
-    abstract public function getUrl($params = []);
+    abstract public function getUrlNext($params = []);
+
+    /**
+     * Get test's url for previous action
+     *
+     * @param array $params
+     * @return string
+     */
+    abstract public function getUrlPrev($params = []);
 
     /**
      * Render html

@@ -1,0 +1,12 @@
+<div id="progressbar_block">
+    {% block progressbar_block %}
+        <strong>{{ 'common.progress'|trans }} <span id="location">({{ progress.getCurrent }}/{{ progress.getTotal }})</span></strong>
+        <div id="progressbar"></div>
+        <div class="shadow"></div>
+
+        <script type="text/javascript">
+            $("#progressbar").progressbar().progressbar("value", {{ (progress.getCurrent / progress.getTotal * 100)|round(0, 'ceil') }});
+        </script>
+    {% endblock progressbar_block %}
+</div><!-- end top-wizard -->
+

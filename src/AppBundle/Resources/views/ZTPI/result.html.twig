@@ -1,0 +1,14 @@
+{% extends '@App/layout.html.twig' %}
+
+{% block application_content %}
+
+    {% include '@App/TestBase/progress.html.twig' %}
+
+    <div class="submit step" id="complete">
+        <i class="icon-check"></i>
+        <h3>{{ 'ztpi_short.result.thank_you'|trans }}</h3>
+    </div><!-- end submit step -->
+
+    {% include '@App/TestBase/next_prev_buttons.html.twig' %}
+
+{% endblock application_content %}

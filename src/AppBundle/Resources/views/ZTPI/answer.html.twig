@@ -1,2 +1,5 @@
+{% form_theme form '@App/TestBase/form_answer_radio.html.twig' %}
+
 {{ form_errors(form.answer) }}
 {{ form_widget(form.answer) }}
+{{ form_widget(form._token) }}

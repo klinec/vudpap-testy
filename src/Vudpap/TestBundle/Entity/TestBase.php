@@ -6,9 +6,9 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="vudpap_test")
+ * @ORM\Table(name="test_base")
  */
-class Test
+class TestBase
 {
     const ACTION_FORM = 'form';
     const ACTION_QUESTION = 'question';
@@ -69,13 +69,13 @@ class Test
     protected $question;
 
     /**
-     * Serialized answers
+     * Serialized result
      *
      * @var string
      *
-     * @ORM\Column(name="answer", type="text", nullable=true)
+     * @ORM\Column(name="result", type="text", nullable=true)
      */
-    protected $answer;
+    protected $result;
 
     /**
      * @var \DateTime
@@ -94,7 +94,7 @@ class Test
     /**
      * @param string $action
      *
-     * @return Test
+     * @return TestBase
      */
     public function setAction($action)
     {
@@ -114,7 +114,7 @@ class Test
     /**
      * @param string $initPage
      *
-     * @return Test
+     * @return TestBase
      */
     public function setInitPage($initPage)
     {
@@ -132,29 +132,25 @@ class Test
     }
 
     /**
-     * @param string $answer
-     *
-     * @return Test
+     * @return string
      */
-    public function setAnswer($answer)
+    public function getResult()
     {
-        $this->answer = $answer;
-
-        return $this;
+        return $this->result;
     }
 
     /**
-     * @return string
+     * @param string $result
      */
-    public function getAnswer()
+    public function setResult($result)
     {
-        return $this->answer;
+        $this->result = $result;
     }
 
     /**
      * @param \DateTime $createdAt
      *
-     * @return Test
+     * @return TestBase
      */
     public function setCreatedAt($createdAt)
     {
@@ -182,7 +178,7 @@ class Test
     /**
      * @param string $question
      *
-     * @return Test
+     * @return TestBase
      */
     public function setQuestion($question)
     {
@@ -202,7 +198,7 @@ class Test
     /**
      * @param string $testName
      *
-     * @return Test
+     * @return TestBase
      */
     public function setTestName($testName)
     {
@@ -222,7 +218,7 @@ class Test
     /**
      * @param \DateTime $updatedAt
      *
-     * @return Test
+     * @return TestBase
      */
     public function setUpdatedAt($updatedAt)
     {
@@ -242,7 +238,7 @@ class Test
     /**
      * @param string $url
      *
-     * @return Test
+     * @return TestBase
      */
     public function setUrl($url)
     {

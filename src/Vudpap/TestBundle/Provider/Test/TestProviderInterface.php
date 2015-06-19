@@ -3,6 +3,8 @@
 namespace Vudpap\TestBundle\Provider\Test;
 
 
+use Vudpap\TestBundle\Entity\Progress;
+
 interface TestProviderInterface
 {
     /**
@@ -36,12 +38,28 @@ interface TestProviderInterface
     public function getNextAction($action = null);
 
     /**
-     * Get test's url
+     * Get previous action name
+     *
+     * @param $action
+     * @return string|null
+     */
+    public function getPreviousAction($action = null);
+
+    /**
+     * Get test's url for next action
      *
      * @param array $params
      * @return string
      */
-    public function getUrl($params = []);
+    public function getUrlNext($params = []);
+
+    /**
+     * Get test's url for previous action
+     *
+     * @param array $params
+     * @return string
+     */
+    public function getUrlPrev($params = []);
 
     /**
      * Render html
@@ -51,9 +69,9 @@ interface TestProviderInterface
     public function render();
 
     /**
-     * Get current question order number
+     * Gets current and total progress
      *
-     * @return int
+     * @return Progress
      */
-    public function progress();
+    public function getProgress();
 }
